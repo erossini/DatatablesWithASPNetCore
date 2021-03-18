@@ -34,7 +34,9 @@ namespace DatatablesWithASPNetCore.Controllers.Apis
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
+                
                 var customerData = (from tempcustomer in context.Customers select tempcustomer);
+
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
@@ -46,6 +48,7 @@ namespace DatatablesWithASPNetCore.Controllers.Apis
                                         || m.Contact.Contains(searchValue)
                                         || m.Email.Contains(searchValue));
                 }
+
                 recordsTotal = customerData.Count();
                 var data = customerData.Skip(skip).Take(pageSize).ToList();
                 var jsonData = new { 
@@ -54,6 +57,7 @@ namespace DatatablesWithASPNetCore.Controllers.Apis
                     recordsTotal = recordsTotal, 
                     data = data 
                 };
+
                 return Ok(jsonData);
             }
             catch (Exception ex)
